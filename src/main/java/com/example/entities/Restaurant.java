@@ -1,10 +1,11 @@
 package com.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -21,4 +22,11 @@ public class Restaurant {
     private String address;
     private double rating;
     private String imageUrl;
+
+    @ManyToOne
+    private FoodCategory category;
+
+    @OneToMany(mappedBy = "restaurant")
+    @JsonIgnore
+    private List<FoodItem> foodItems = new ArrayList<>();
 }

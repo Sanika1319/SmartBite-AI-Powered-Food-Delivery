@@ -1,9 +1,6 @@
 package com.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -22,4 +19,10 @@ public class Orders {
     private String status;
     private String paymentMethod;
     private String createdAt;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Address deliveryAddress;
 }
