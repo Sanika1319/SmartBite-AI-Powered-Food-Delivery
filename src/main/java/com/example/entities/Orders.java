@@ -3,6 +3,8 @@ package com.example.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,13 +18,18 @@ public class Orders {
 
     private double totalAmount;
 
-    private String status;
-    private String paymentMethod;
-    private String createdAt;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+//    private String paymentMethod;
+    private LocalDateTime  createdAt;
+    @Column(nullable = false)
+    private LocalDateTime statusUpdatedAt;
+
 
     @ManyToOne
     private User user;
 
     @ManyToOne
+
     private Address deliveryAddress;
 }

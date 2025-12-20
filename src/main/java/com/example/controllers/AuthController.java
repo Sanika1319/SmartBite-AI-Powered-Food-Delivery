@@ -1,7 +1,9 @@
 package com.example.controllers;
 
 import com.example.entities.User;
+import com.example.repository.UserRepository;
 import com.example.request.LoginRequest;
+import com.example.services.EmailService;
 import com.example.services.UserService;
 import com.example.services.serviceImpl.CustomUserDetailsService;
 import com.example.services.serviceImpl.JwtService;
@@ -30,6 +32,11 @@ public class AuthController {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserRepository userRepository;
     @PostMapping("/register")
     public ResponseEntity<User> saveUser(@RequestBody User user){
         return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
@@ -43,6 +50,12 @@ public class AuthController {
         if(authenticate.isAuthenticated()){
             String jwt = jwtService
                     .generateToken(customUserDetailsService.loadUserByUsername(loginRequest.getEmail()));
+            try{
+                User user = userRepository.findByEmail(loginRequest.getEmail()).get();
+                emailService.sendEmail(loginRequest.getEmail(),"Welcome back to Smart Bite! \uD83D\uDE0B","Hi "+user.getName()+" You’ve successfully logged in to your account. Your next delicious meal is just a few taps away. ");
+            }catch (Exception e){
+                throw new RuntimeException("Problem To Send Email");
+            }
             return new ResponseEntity<>(jwt, HttpStatus.OK);
         }else {
             return  new ResponseEntity<>("Unauthorized User",HttpStatus.UNAUTHORIZED);

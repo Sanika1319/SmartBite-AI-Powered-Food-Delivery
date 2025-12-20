@@ -21,7 +21,8 @@ public class User {
     @Column(unique = true)
     private String email;
     private  String password;
-    private String phone;
+    private Long phone;
+    private String imgUrl;
 
     @Enumerated(EnumType.STRING)
     private Role role;

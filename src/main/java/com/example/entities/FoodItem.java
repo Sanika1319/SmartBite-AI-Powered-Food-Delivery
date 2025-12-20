@@ -18,7 +18,11 @@ public class FoodItem {
     private double price;
     private String description;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
+    private FoodType type;
 
     @ManyToOne
     private Restaurant restaurant;
+
+
 }

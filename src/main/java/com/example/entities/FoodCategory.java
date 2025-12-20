@@ -20,7 +20,8 @@ public class FoodCategory {
     private String name;
     private String imageUrl;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnore
     private List<Restaurant> restaurants = new ArrayList<>();
 }

@@ -26,6 +26,7 @@ public class Address {
     private String type;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "deliveryAddress")
