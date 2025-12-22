@@ -3,6 +3,7 @@ package com.example.services;
 import com.example.dto.UserDto;
 import com.example.entities.ChangePassword;
 import com.example.entities.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,6 +23,10 @@ public interface UserService {
     void updatePassword(Long userId, ChangePassword changePassword);
 
     void deleteUser(Long userId);
+
+    void updateProfileImage(Long userId, MultipartFile file);
+
+
 
 
 }

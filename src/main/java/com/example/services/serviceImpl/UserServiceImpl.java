@@ -11,11 +11,13 @@ import com.example.entities.User;
 import com.example.repository.CartRepository;
 import com.example.repository.UserRepository;
 import com.example.services.EmailService;
+import com.example.services.ImageUploader;
 import com.example.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -35,6 +37,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ImageUploader imageUploader;
+
     public User userDtoToUser(UserDto userDto){
         return modelMapper.map(userDto,User.class);
     }
@@ -121,5 +127,16 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserIdNotFoundException("User Not Found: " + userId));
         userRepository.delete(user);
+    }
+
+    @Override
+    public void updateProfileImage(Long userId, MultipartFile file) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserIdNotFoundException("User Not Found: " + userId));
+        if(user.getImgUrl() != null && !user.getImgUrl().isBlank()){
+            imageUploader.deleteByUrl(user.getImgUrl());
+        }
+        String uploadedImage = imageUploader.uploadUserProfileImage(userId, file);
+        user.setImgUrl(uploadedImage);
+        userRepository.save(user);
     }
 }
